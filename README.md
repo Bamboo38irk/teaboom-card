@@ -9,7 +9,7 @@ Requires Node.js 16 or newer.
 ```bash
 npm install
 npm run dev     # dev build in dev/ and a local server with live reload: http://localhost:3004
-npm run build   # production build in builds/ with minified HTML, CSS and JS
+npm run build   # build in builds/: formatted HTML, CSS and JS without sourcemaps
 ```
 
 With gulp-cli installed globally, `gulp dev` and `gulp build` do the same.
@@ -64,8 +64,8 @@ Helpers are loaded once on start, so restart `npm run dev` after editing `tars/h
 
 ## What the build does
 
-- Compiles pages with Handlebars.
-- Compiles SCSS with Autoprefixer; sourcemaps in dev, CSSO minification in the build.
-- Checks component scripts with ESLint, concatenates them into `static/js/main.js`, minifies with Terser in the build.
+- Compiles pages with Handlebars and formats the HTML with js-beautify.
+- Compiles SCSS with Autoprefixer; sourcemaps in dev only.
+- Checks component scripts with ESLint and concatenates them into `static/js/main.js`.
 - Copies images, fonts and misc files.
 - In dev mode watches all sources and reloads the browser.

@@ -5,7 +5,7 @@ const plumber = require('gulp-plumber');
 const browserSync = require('browser-sync');
 const config = require('../tars-config');
 
-const isRelease = !process.argv.slice(2).includes('dev');
+const isBuild = !process.argv.slice(2).includes('dev');
 
 const paths = {
     pages: 'markup/pages/**/*.html',
@@ -20,7 +20,7 @@ const paths = {
 };
 
 function guard() {
-    if (isRelease) {
+    if (isBuild) {
         return new PassThrough({ objectMode: true });
     }
 
@@ -34,9 +34,9 @@ function guard() {
 
 module.exports = {
     config,
-    isRelease,
+    isBuild,
     paths,
     guard,
-    dest: isRelease ? config.buildPath : config.devPath,
+    dest: isBuild ? config.buildPath : config.devPath,
     server: browserSync.create('tars'),
 };

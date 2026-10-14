@@ -1,1 +1,354 @@
-!function(){"use strict";document.querySelectorAll("[data-product]").forEach(e=>{const t=e.querySelector("[data-crumbs]"),a=e.querySelector("[data-tabs]"),r=a.querySelector("[data-tabs-pill]");function s(){const e=a.querySelector("[data-tab].is-active");r.style.width=`${e.offsetWidth}px`,r.style.transform=`translateX(${e.offsetLeft}px)`}function o(e){a.querySelectorAll("[data-tab]").forEach(t=>{t.classList.toggle("is-active",t.dataset.tab===e)}),a.querySelectorAll("[data-panel]").forEach(t=>{t.classList.toggle("is-active",t.dataset.panel===e)}),s()}new ResizeObserver(()=>{t.scrollLeft=t.scrollWidth}).observe(t.firstElementChild),document.fonts.ready.then(()=>{s(),requestAnimationFrame(()=>a.classList.add("is-ready"))}),window.addEventListener("resize",s),a.querySelectorAll("[data-tab]").forEach(e=>{e.addEventListener("click",()=>o(e.dataset.tab))}),e.querySelectorAll("[data-tab-link]").forEach(e=>{e.addEventListener("click",()=>o(e.dataset.tabLink))}),e.querySelectorAll("[data-favorite]").forEach(t=>{t.addEventListener("click",()=>{const a=t.classList.toggle("is-active"),r=e.querySelector("[data-cart-add]");document.dispatchEvent(new CustomEvent("toast:show",{detail:{type:a?"favorite":"unfavorite",title:a?"Добавлено в избранное":"Удалено из избранного",name:t.dataset.name,info:r?r.dataset.info:t.dataset.info,image:t.dataset.image,href:"https://teaboom.ru/my-favorite-products",linkLabel:"Перейти в избранное"}}))})});const n=e.querySelector("[data-buy]");if(!n)return;const c=e.querySelectorAll("[data-field]"),d=e.querySelectorAll("[data-discount-only]"),l=n.querySelector("[data-cart-add]"),i=l.querySelector("[data-submit-label]"),u=l.querySelector("[data-submit-qty]"),f={};function m(){const e=f[l.dataset.sku]||0;l.classList.toggle("is-added",e>0),i.textContent=e?"Добавить ещё":"В корзину",u.textContent=e}function y(e){c.forEach(t=>{t.textContent=e.dataset[t.dataset.field]}),d.forEach(t=>{t.hidden=!e.dataset.oldPrice}),l.dataset.sku=e.dataset.sku,l.dataset.info=`${e.dataset.weight} · ${e.dataset.price}`,m()}n.addEventListener("change",e=>{"sku"===e.target.name&&y(e.target)}),n.addEventListener("submit",e=>e.preventDefault()),u.addEventListener("animationend",()=>u.classList.remove("is-bumped"));const h=e.querySelector("[data-sticky-cta]"),q=document.querySelector(".header");new IntersectionObserver(([e])=>{h.classList.toggle("is-visible",!e.isIntersecting)},{rootMargin:`-${q.offsetHeight}px 0px -40% 0px`}).observe(n),document.addEventListener("cart:add",e=>{f[e.detail.sku]=e.detail.qty,m(),e.detail.sku===l.dataset.sku&&(u.classList.remove("is-bumped"),u.offsetWidth,u.classList.add("is-bumped"))}),y(n.querySelector('[name="sku"]:checked'))})}(),function(){"use strict";const e=[...document.querySelectorAll("[data-dropdown]")];function t(e,t){e.classList.toggle("is-open",t)}e.forEach(a=>{a.querySelector("[data-dropdown-toggle]").addEventListener("click",()=>{const r=!a.classList.contains("is-open"),s=a.querySelector("input");e.forEach(e=>t(e,e===a&&r)),r&&s&&s.focus()})}),document.addEventListener("click",a=>{e.forEach(e=>{e.contains(a.target)||t(e,!1)})}),document.addEventListener("keydown",a=>{"Escape"===a.key&&e.forEach(e=>t(e,!1))});const a=document.querySelector("[data-cart-count]"),r=document.querySelector("[data-toast]"),s={};let o=null;function n(){r.classList.remove("is-visible")}function c({type:e,title:t,name:a,info:s,image:c,href:d,linkLabel:l}){r.dataset.type=e,r.querySelector("[data-toast-title]").textContent=t,r.querySelector("[data-toast-image]").style.backgroundImage=`url(${c})`,r.querySelector("[data-toast-name]").textContent=a,r.querySelector("[data-toast-info]").textContent=s,r.querySelector("[data-toast-link]").href=d,r.querySelector("[data-toast-link-label]").textContent=l,r.classList.add("is-visible"),clearTimeout(o),o=setTimeout(n,4e3)}document.addEventListener("toast:show",e=>c(e.detail)),document.addEventListener("click",e=>{const t=e.target.closest("[data-cart-add]");if(!t)return;const r=t.dataset.sku;s[r]=(s[r]||0)+1,a.textContent=Number(a.textContent)+1,a.classList.remove("is-bumped"),a.offsetWidth,a.classList.add("is-bumped"),c({type:"cart",title:"Добавлено в корзину",name:t.dataset.name,info:`${t.dataset.info} · ${s[r]} шт.`,image:t.dataset.image,href:"https://teaboom.ru/cart",linkLabel:"Перейти в корзину"}),document.dispatchEvent(new CustomEvent("cart:add",{detail:{sku:r,qty:s[r]}}))}),r.querySelector("[data-toast-close]").addEventListener("click",n);const d=e=>e.toLowerCase().replace(/ё/g,"е");document.querySelectorAll("[data-search]").forEach(e=>{const t=e.querySelector("form"),a=e.querySelector("[data-search-input]"),r=e.querySelector("[data-search-popular]"),s=e.querySelector("[data-search-results]"),o=e.querySelector("[data-search-empty]"),n=e.querySelector("[data-search-all]"),c=e.querySelector("[data-search-count]"),l=[...e.querySelectorAll("[data-search-item]")].map(e=>{const t=e.querySelector("[data-search-name]");return{item:e,name:t,text:t.textContent.trim()}});function i(){const e=a.value.trim(),i=d(e),u=i.length>=2;let f=0;l.forEach(({item:e,name:t,text:a})=>{const r=u&&d(a).includes(i);e.hidden=!r,r&&(!function(e,t,a){const r=d(t).indexOf(a),s=document.createElement("mark");s.textContent=t.slice(r,r+a.length),e.textContent="",e.append(t.slice(0,r),s,t.slice(r+a.length))}(t,a,i),f+=1)}),r.hidden=u,s.hidden=!u,o.hidden=f>0,n.hidden=0===f,c.textContent=f,n.href=`${t.action}?q=${encodeURIComponent(e)}`}a.addEventListener("input",i),e.querySelectorAll("[data-search-query]").forEach(e=>{e.addEventListener("click",()=>{a.value=e.dataset.searchQuery,a.focus(),i()})})})}(),function(){"use strict";document.querySelectorAll("[data-related]").forEach(e=>{const t=e.querySelector("[data-slider]"),a=[...t.children];let r=null;function s(){return a.map(e=>{const t=e.cloneNode(!0);return t.classList.add("card--clone"),t})}function o(){t.scrollLeft=a[0].offsetLeft-t.children[0].offsetLeft}function n(){const e=a[0].offsetLeft-t.children[0].offsetLeft;e&&(t.scrollLeft<.5*e?t.scrollLeft+=e:t.scrollLeft>=1.5*e&&(t.scrollLeft-=e))}function c(){const e=parseFloat(getComputedStyle(t).columnGap)||0;return a[0].offsetWidth+e}t.prepend(...s()),t.append(...s()),e.querySelector("[data-slider-prev]").addEventListener("click",()=>{t.scrollBy({left:-c(),behavior:"smooth"})}),e.querySelector("[data-slider-next]").addEventListener("click",()=>{t.scrollBy({left:c(),behavior:"smooth"})}),t.addEventListener("scroll",()=>{clearTimeout(r),r=setTimeout(n,120)},{passive:!0}),window.addEventListener("resize",o),o()})}();
+(function () {
+    'use strict';
+
+    const dropdowns = [...document.querySelectorAll('[data-dropdown]')];
+
+    function setOpen(dropdown, isOpen) {
+        dropdown.classList.toggle('is-open', isOpen);
+    }
+
+    dropdowns.forEach((dropdown) => {
+        dropdown.querySelector('[data-dropdown-toggle]').addEventListener('click', () => {
+            const isOpen = !dropdown.classList.contains('is-open');
+            const field = dropdown.querySelector('input');
+
+            dropdowns.forEach((item) => setOpen(item, item === dropdown && isOpen));
+
+            if (isOpen && field) {
+                field.focus();
+            }
+        });
+    });
+
+    document.addEventListener('click', (event) => {
+        dropdowns.forEach((dropdown) => {
+            if (!dropdown.contains(event.target)) {
+                setOpen(dropdown, false);
+            }
+        });
+    });
+
+    document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape') {
+            dropdowns.forEach((dropdown) => setOpen(dropdown, false));
+        }
+    });
+
+    const counter = document.querySelector('[data-cart-count]');
+    const toast = document.querySelector('[data-toast]');
+    const cart = {};
+    let toastTimer = null;
+
+    function hideToast() {
+        toast.classList.remove('is-visible');
+    }
+
+    function showToast({ type, title, name, info, image, href, linkLabel }) {
+        toast.dataset.type = type;
+        toast.querySelector('[data-toast-title]').textContent = title;
+        toast.querySelector('[data-toast-image]').style.backgroundImage = `url(${image})`;
+        toast.querySelector('[data-toast-name]').textContent = name;
+        toast.querySelector('[data-toast-info]').textContent = info;
+        toast.querySelector('[data-toast-link]').href = href;
+        toast.querySelector('[data-toast-link-label]').textContent = linkLabel;
+        toast.classList.add('is-visible');
+
+        clearTimeout(toastTimer);
+        toastTimer = setTimeout(hideToast, 4000);
+    }
+
+    document.addEventListener('toast:show', (event) => showToast(event.detail));
+
+    function bumpCounter() {
+        counter.textContent = Number(counter.textContent) + 1;
+        counter.classList.remove('is-bumped');
+        void counter.offsetWidth;
+        counter.classList.add('is-bumped');
+    }
+
+    document.addEventListener('click', (event) => {
+        const button = event.target.closest('[data-cart-add]');
+
+        if (!button) {
+            return;
+        }
+
+        const sku = button.dataset.sku;
+
+        cart[sku] = (cart[sku] || 0) + 1;
+        bumpCounter();
+        showToast({
+            type: 'cart',
+            title: 'Добавлено в корзину',
+            name: button.dataset.name,
+            info: `${button.dataset.info} · ${cart[sku]} шт.`,
+            image: button.dataset.image,
+            href: 'https://teaboom.ru/cart',
+            linkLabel: 'Перейти в корзину',
+        });
+        document.dispatchEvent(new CustomEvent('cart:add', { detail: { sku, qty: cart[sku] } }));
+    });
+
+    toast.querySelector('[data-toast-close]').addEventListener('click', hideToast);
+
+    const normalize = (value) => value.toLowerCase().replace(/ё/g, 'е');
+
+    function highlight(node, text, query) {
+        const index = normalize(text).indexOf(query);
+        const mark = document.createElement('mark');
+
+        mark.textContent = text.slice(index, index + query.length);
+        node.textContent = '';
+        node.append(text.slice(0, index), mark, text.slice(index + query.length));
+    }
+
+    document.querySelectorAll('[data-search]').forEach((search) => {
+        const form = search.querySelector('form');
+        const input = search.querySelector('[data-search-input]');
+        const popular = search.querySelector('[data-search-popular]');
+        const results = search.querySelector('[data-search-results]');
+        const empty = search.querySelector('[data-search-empty]');
+        const all = search.querySelector('[data-search-all]');
+        const count = search.querySelector('[data-search-count]');
+        const items = [...search.querySelectorAll('[data-search-item]')].map((item) => {
+            const name = item.querySelector('[data-search-name]');
+
+            return { item, name, text: name.textContent.trim() };
+        });
+
+        function update() {
+            const value = input.value.trim();
+            const query = normalize(value);
+            const isActive = query.length >= 2;
+            let found = 0;
+
+            items.forEach(({ item, name, text }) => {
+                const isMatch = isActive && normalize(text).includes(query);
+
+                item.hidden = !isMatch;
+
+                if (isMatch) {
+                    highlight(name, text, query);
+                    found += 1;
+                }
+            });
+
+            popular.hidden = isActive;
+            results.hidden = !isActive;
+            empty.hidden = found > 0;
+            all.hidden = found === 0;
+            count.textContent = found;
+            all.href = `${form.action}?q=${encodeURIComponent(value)}`;
+        }
+
+        input.addEventListener('input', update);
+
+        search.querySelectorAll('[data-search-query]').forEach((chip) => {
+            chip.addEventListener('click', () => {
+                input.value = chip.dataset.searchQuery;
+                input.focus();
+                update();
+            });
+        });
+    });
+})();
+
+(function () {
+    'use strict';
+
+    document.querySelectorAll('[data-product]').forEach((product) => {
+        const crumbs = product.querySelector('[data-crumbs]');
+        const tabs = product.querySelector('[data-tabs]');
+
+        const pill = tabs.querySelector('[data-tabs-pill]');
+
+        function movePill() {
+            const active = tabs.querySelector('[data-tab].is-active');
+
+            pill.style.width = `${active.offsetWidth}px`;
+            pill.style.transform = `translateX(${active.offsetLeft}px)`;
+        }
+
+        function openTab(name) {
+            tabs.querySelectorAll('[data-tab]').forEach((button) => {
+                button.classList.toggle('is-active', button.dataset.tab === name);
+            });
+
+            tabs.querySelectorAll('[data-panel]').forEach((panel) => {
+                panel.classList.toggle('is-active', panel.dataset.panel === name);
+            });
+
+            movePill();
+        }
+
+        new ResizeObserver(() => {
+            crumbs.scrollLeft = crumbs.scrollWidth;
+        }).observe(crumbs.firstElementChild);
+
+        document.fonts.ready.then(() => {
+            movePill();
+            requestAnimationFrame(() => tabs.classList.add('is-ready'));
+        });
+
+        window.addEventListener('resize', movePill);
+
+        tabs.querySelectorAll('[data-tab]').forEach((button) => {
+            button.addEventListener('click', () => openTab(button.dataset.tab));
+        });
+
+        product.querySelectorAll('[data-tab-link]').forEach((link) => {
+            link.addEventListener('click', () => openTab(link.dataset.tabLink));
+        });
+
+        product.querySelectorAll('[data-favorite]').forEach((button) => {
+            button.addEventListener('click', () => {
+                const isActive = button.classList.toggle('is-active');
+                const submit = product.querySelector('[data-cart-add]');
+
+                document.dispatchEvent(new CustomEvent('toast:show', {
+                    detail: {
+                        type: isActive ? 'favorite' : 'unfavorite',
+                        title: isActive ? 'Добавлено в избранное' : 'Удалено из избранного',
+                        name: button.dataset.name,
+                        info: submit ? submit.dataset.info : button.dataset.info,
+                        image: button.dataset.image,
+                        href: 'https://teaboom.ru/my-favorite-products',
+                        linkLabel: 'Перейти в избранное',
+                    },
+                }));
+            });
+        });
+
+        const form = product.querySelector('[data-buy]');
+
+        if (!form) {
+            return;
+        }
+
+        const fields = product.querySelectorAll('[data-field]');
+        const discountOnly = product.querySelectorAll('[data-discount-only]');
+        const submit = form.querySelector('[data-cart-add]');
+        const submitLabel = submit.querySelector('[data-submit-label]');
+        const submitQty = submit.querySelector('[data-submit-qty]');
+        const quantities = {};
+
+        function renderSubmit() {
+            const qty = quantities[submit.dataset.sku] || 0;
+
+            submit.classList.toggle('is-added', qty > 0);
+            submitLabel.textContent = qty ? 'Добавить ещё' : 'В корзину';
+            submitQty.textContent = qty;
+        }
+
+        function render(pack) {
+            fields.forEach((field) => {
+                field.textContent = pack.dataset[field.dataset.field];
+            });
+
+            discountOnly.forEach((node) => {
+                node.hidden = !pack.dataset.oldPrice;
+            });
+
+            submit.dataset.sku = pack.dataset.sku;
+            submit.dataset.info = `${pack.dataset.weight} · ${pack.dataset.price}`;
+            renderSubmit();
+        }
+
+        form.addEventListener('change', (event) => {
+            if (event.target.name === 'sku') {
+                render(event.target);
+            }
+        });
+
+        form.addEventListener('submit', (event) => event.preventDefault());
+        submitQty.addEventListener('animationend', () => submitQty.classList.remove('is-bumped'));
+
+        const cta = product.querySelector('[data-sticky-cta]');
+        const header = document.querySelector('.header');
+
+        new IntersectionObserver(([entry]) => {
+            cta.classList.toggle('is-visible', !entry.isIntersecting);
+        }, { rootMargin: `-${header.offsetHeight}px 0px -40% 0px` }).observe(form);
+
+        document.addEventListener('cart:add', (event) => {
+            quantities[event.detail.sku] = event.detail.qty;
+            renderSubmit();
+
+            if (event.detail.sku === submit.dataset.sku) {
+                submitQty.classList.remove('is-bumped');
+                void submitQty.offsetWidth;
+                submitQty.classList.add('is-bumped');
+            }
+        });
+
+        render(form.querySelector('[name="sku"]:checked'));
+    });
+})();
+
+(function () {
+    'use strict';
+
+    document.querySelectorAll('[data-related]').forEach((section) => {
+        const slider = section.querySelector('[data-slider]');
+        const items = [...slider.children];
+        let timer = null;
+
+        function makeClones() {
+            return items.map((item) => {
+                const clone = item.cloneNode(true);
+
+                clone.classList.add('card--clone');
+
+                return clone;
+            });
+        }
+
+        slider.prepend(...makeClones());
+        slider.append(...makeClones());
+
+        function setWidth() {
+            return items[0].offsetLeft - slider.children[0].offsetLeft;
+        }
+
+        function center() {
+            slider.scrollLeft = items[0].offsetLeft - slider.children[0].offsetLeft;
+        }
+
+        function loop() {
+            const width = setWidth();
+
+            if (!width) {
+                return;
+            }
+
+            if (slider.scrollLeft < width * 0.5) {
+                slider.scrollLeft += width;
+            } else if (slider.scrollLeft >= width * 1.5) {
+                slider.scrollLeft -= width;
+            }
+        }
+
+        function step() {
+            const gap = parseFloat(getComputedStyle(slider).columnGap) || 0;
+
+            return items[0].offsetWidth + gap;
+        }
+
+        section.querySelector('[data-slider-prev]').addEventListener('click', () => {
+            slider.scrollBy({ left: -step(), behavior: 'smooth' });
+        });
+
+        section.querySelector('[data-slider-next]').addEventListener('click', () => {
+            slider.scrollBy({ left: step(), behavior: 'smooth' });
+        });
+
+        slider.addEventListener('scroll', () => {
+            clearTimeout(timer);
+            timer = setTimeout(loop, 120);
+        }, { passive: true });
+
+        window.addEventListener('resize', center);
+
+        center();
+    });
+})();

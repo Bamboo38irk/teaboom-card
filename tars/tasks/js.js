@@ -4,11 +4,10 @@ const gulp = require('gulp');
 const gulpif = require('gulp-if');
 const concat = require('gulp-concat');
 const eslint = require('gulp-eslint');
-const terser = require('gulp-terser');
 const sourcemaps = require('gulp-sourcemaps');
-const { config, isRelease, paths, guard, dest, server } = require('../tars');
+const { config, isBuild, paths, guard, dest, server } = require('../tars');
 
-const useSourcemaps = config.sourcemaps && !isRelease;
+const useSourcemaps = config.sourcemaps && !isBuild;
 
 module.exports = function js() {
     return gulp
@@ -19,7 +18,6 @@ module.exports = function js() {
         .pipe(eslint.failAfterError())
         .pipe(gulpif(useSourcemaps, sourcemaps.init()))
         .pipe(concat('main.js'))
-        .pipe(gulpif(isRelease, terser()))
         .pipe(gulpif(useSourcemaps, sourcemaps.write()))
         .pipe(gulp.dest(`${dest}static/js`))
         .pipe(server.stream());
