@@ -459,6 +459,10 @@ p, dd {
 .header__menu::-webkit-scrollbar {
   display: none;
 }
+.header__menu > li {
+  -webkit-box-flex: 0;
+          flex: none;
+}
 @media (max-width: 1099px) {
   .header__menu {
     padding-left: 8px;
@@ -503,6 +507,8 @@ p, dd {
   color: var(--coral);
 }
 .header__link-icon {
+  -webkit-box-flex: 0;
+          flex: none;
   width: 18px;
   height: 18px;
 }

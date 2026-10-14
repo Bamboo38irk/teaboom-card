@@ -185,6 +185,10 @@
       display:none;
     }
 
+    > li {
+      flex:none;
+    }
+
     @include below(lg) {
       padding-left:8px;
       border-left:1px solid var(--line);
@@ -225,6 +229,7 @@
   }
 
   &__link-icon {
+    flex:none;
     width:18px;
     height:18px;
   }
