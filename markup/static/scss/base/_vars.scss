@@ -1,0 +1,34 @@
+@use 'mixins' as *;
+
+:root {
+  --font-display:'Coolvetica', 'Arial Black', sans-serif;
+  --font-body:'Golos Text', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-hand:'Passions Conflict', cursive;
+
+  --cream:#FBF7EC;
+  --paper:#FFFFFF;
+  --ink:#1C1D18;
+  --ink-soft:#55574F;
+  --muted:#8A8B82;
+  --line:#ECE5D3;
+  --line-strong:#DDD3BC;
+
+  --sun:#F5D730;
+  --sun-soft:#FBEFA8;
+  --sun-deep:#F0CB12;
+  --sun-glow:0 10px 24px -12px rgba(196, 150, 0, .75);
+  --leaf:#3B7647;
+  --coral:#E8572E;
+
+  --radius-lg:28px;
+  --radius:18px;
+
+  --gutter:clamp(16px, 4vw, 64px);
+  --header-h:124px;
+  --ease-out:cubic-bezier(.2, .7, .2, 1);
+  --transition:.25s var(--ease-out);
+
+  @include from(lg) {
+    --header-h:85px;
+  }
+}

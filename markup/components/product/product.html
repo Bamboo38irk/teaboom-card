@@ -1,0 +1,258 @@
+<article class="product{{#unless packs}} product--empty{{/unless}}" data-product>
+    <div class="container">
+        <nav class="crumbs" data-crumbs>
+            <ol class="crumbs__list">
+                {{#each breadcrumbs}}
+                    <li class="crumbs__item"><a class="crumbs__link" href="{{href}}">{{label}}</a></li>
+                {{/each}}
+                <li class="crumbs__item crumbs__item--current">{{name}}</li>
+            </ol>
+        </nav>
+
+        <div class="product__grid">
+            <figure class="product__media">
+                <picture>
+                    <source
+                        type="image/webp"
+                        srcset="static/img/content/{{image.name}}-600.webp 600w, static/img/content/{{image.name}}-970.webp 970w"
+                        sizes="(min-width: 1100px) 640px, (min-width: 768px) 46vw, 100vw">
+                    <img class="product__image" src="static/img/content/{{image.name}}.jpg" width="970" height="970" alt="{{image.alt}}" fetchpriority="high">
+                </picture>
+
+                <figcaption class="product__note">{{image.note}}</figcaption>
+            </figure>
+
+            <header class="product__head">
+                <div class="product__tags">
+                    <a class="product__category" href="{{category.href}}">{{category.label}}</a>
+                    <span class="product__origin">{{origin}}</span>
+                    {{#with packs.[0]}}
+                        <span class="product__sku">арт. <span data-field="sku">{{sku}}</span></span>
+                    {{/with}}
+                </div>
+                <h1 class="product__title">{{name}}</h1>
+                <p class="product__lead">{{nbsp lead}}</p>
+                <ul class="product__notes">
+                    {{#each notes}}
+                        <li class="product__note-tag">{{this}}</li>
+                    {{/each}}
+                </ul>
+                <div class="product__meta">
+                    <p class="product__stock">{{stock}}</p>
+                    <a class="product__reviews" href="#info" data-tab-link="reviews">
+                        {{#if reviews.items}}
+                            {{Icon iconName='star' className='product__reviews-star'}}
+                            {{reviews.rating}} · {{reviews.countLabel}}
+                        {{else}}
+                            Оставить отзыв
+                        {{/if}}
+                    </a>
+                </div>
+            </header>
+
+            {{#if packs}}
+                <form class="buy" id="buy" data-buy>
+                    <fieldset class="buy__packs">
+                        <legend class="buy__legend">Фасовка</legend>
+                        <div class="buy__options">
+                            {{#each packs}}
+                                <label class="pack">
+                                    <input
+                                        class="pack__input"
+                                        type="radio"
+                                        name="sku"
+                                        value="{{sku}}"
+                                        data-weight="{{grams}}&nbsp;г"
+                                        data-sku="{{sku}}"
+                                        data-price="{{money price}}"
+                                        data-old-price="{{#if oldPrice}}{{money oldPrice}}{{/if}}"
+                                        data-discount="{{discount price oldPrice}}"
+                                        data-saving="{{saving price oldPrice}}"
+                                        {{#if @first}}checked{{/if}}>
+                                    <span class="pack__box">
+                                        <span class="pack__weight">{{grams}}&nbsp;г</span>
+                                        <span class="pack__unit">{{unitPrice price grams}} за&nbsp;100&nbsp;г</span>
+                                    </span>
+                                </label>
+                            {{/each}}
+                        </div>
+                    </fieldset>
+
+                    {{#with packs.[0]}}
+                        <div class="buy__summary">
+                            <p class="buy__caption">Цена за <span data-field="weight">{{grams}}&nbsp;г</span></p>
+                            <p class="buy__current" data-field="price">{{money price}}</p>
+                            <p class="buy__old" data-discount-only>
+                                <s data-field="oldPrice">{{money oldPrice}}</s>
+                                <span class="buy__discount">−<span data-field="discount">{{discount price oldPrice}}</span>%</span>
+                                <span class="buy__saving">Экономия <span data-field="saving">{{saving price oldPrice}}</span></span>
+                            </p>
+                        </div>
+                    {{/with}}
+
+                    <div class="buy__actions">
+                        <button
+                            class="button buy__submit"
+                            type="submit"
+                            data-cart-add
+                            data-sku="{{packs.[0].sku}}"
+                            data-name="{{name}}"
+                            data-image="static/img/content/{{image.name}}-600.webp"
+                            data-info="{{packs.[0].grams}}&nbsp;г · {{money packs.[0].price}}">
+                            <span data-submit-label>В корзину</span>
+                            <span class="buy__submit-icon">
+                                {{Icon iconName='cart' className='buy__submit-svg'}}
+                                <span class="buy__submit-qty" data-submit-qty></span>
+                            </span>
+                        </button>
+                        <button
+                            class="buy__favorite"
+                            type="button"
+                            title="В избранное"
+                            data-favorite
+                            data-name="{{name}}"
+                            data-image="static/img/content/{{image.name}}-600.webp">
+                            {{Icon iconName='heart' className='buy__favorite-icon'}}
+                        </button>
+                    </div>
+                </form>
+            {{else}}
+                <div class="buy buy--empty">
+                    <div class="buy__summary">
+                        <p class="buy__empty-title">Сейчас нет в&nbsp;продаже</p>
+                        <p class="buy__empty-text">Этот чай снят с&nbsp;продажи или временно закончился. Загляните в&nbsp;похожие&nbsp;— там есть из&nbsp;чего выбрать.</p>
+                    </div>
+
+                    <div class="buy__actions">
+                        <a class="button buy__submit" href="#related">
+                            Похожие чаи
+                            <span class="buy__submit-icon">{{Icon iconName='arrow-right' className='buy__submit-svg'}}</span>
+                        </a>
+                        <button
+                            class="buy__favorite"
+                            type="button"
+                            title="В избранное"
+                            data-favorite
+                            data-name="{{name}}"
+                            data-image="static/img/content/{{image.name}}-600.webp"
+                            data-info="Нет в наличии">
+                            {{Icon iconName='heart' className='buy__favorite-icon'}}
+                        </button>
+                    </div>
+                </div>
+            {{/if}}
+        </div>
+
+        <section class="info{{#if brewing}} info--brew{{/if}}" id="info">
+            <div class="tabs" data-tabs>
+                <div class="tabs__nav">
+                    <span class="tabs__pill" data-tabs-pill></span>
+                    <button class="tabs__button is-active" type="button" data-tab="description">Описание</button>
+                    {{#if properties}}
+                        <button class="tabs__button" type="button" data-tab="properties">Свойства</button>
+                    {{/if}}
+                    <button class="tabs__button" type="button" data-tab="reviews">
+                        Отзывы
+                        <span class="tabs__count">{{reviews.count}}</span>
+                    </button>
+                </div>
+
+                <div class="tabs__panel tabs__panel--description is-active" data-panel="description">
+                    <div class="tabs__column">
+                        <h2 class="tabs__title">О чае</h2>
+                        <p class="tabs__text">{{nbsp about}}</p>
+                        <p class="tabs__composition"><b>Состав:</b> {{composition}}</p>
+                    </div>
+                    <div class="tabs__column">
+                        <h2 class="tabs__title">Вкус</h2>
+                        <p class="tabs__text">{{nbsp taste}}</p>
+                        {{#if benefits}}
+                            <h3 class="tabs__subtitle">Полезные свойства</h3>
+                            <ul class="tabs__benefits">
+                                {{#each benefits}}
+                                    <li class="tabs__benefit">{{Icon iconName='check' className='tabs__benefit-icon'}}{{this}}</li>
+                                {{/each}}
+                            </ul>
+                        {{/if}}
+                    </div>
+                </div>
+
+                {{#if properties}}
+                    <div class="tabs__panel" data-panel="properties">
+                        <dl class="specs">
+                            {{#each properties}}
+                                <div class="specs__row">
+                                    <dt class="specs__label">{{label}}</dt>
+                                    <dd class="specs__value">{{value}}</dd>
+                                </div>
+                            {{/each}}
+                        </dl>
+                    </div>
+                {{/if}}
+
+                <div class="tabs__panel" data-panel="reviews" id="reviews">
+                    {{#if reviews.items}}
+                        <div class="reviews">
+                            <div class="reviews__summary">
+                                <p class="reviews__rating">{{reviews.rating}}</p>
+                                <span class="stars reviews__stars" style="--rating:{{reviews.ratingValue}}"></span>
+                                <p class="reviews__count">{{reviews.countLabel}}</p>
+                                <a class="button reviews__button" href="{{reviews.href}}">Оставить отзыв</a>
+                            </div>
+                            <ul class="reviews__list">
+                                {{#each reviews.items}}
+                                    <li class="review">
+                                        <div class="review__head">
+                                            <span class="review__avatar">{{initial author}}</span>
+                                            <div class="review__meta">
+                                                <p class="review__author">{{author}}</p>
+                                                <time class="review__date" datetime="{{date}}">{{dateLabel}}</time>
+                                            </div>
+                                            <span class="stars" style="--rating:{{rating}}"></span>
+                                        </div>
+                                        <p class="review__text">{{nbsp text}}</p>
+                                    </li>
+                                {{/each}}
+                            </ul>
+                        </div>
+                    {{else}}
+                        <div class="tabs__empty">
+                            <div class="tabs__empty-body">
+                                <p class="tabs__empty-title">Отзывов пока нет</p>
+                                <p class="tabs__text">Пробовали этот чай? Расскажите, как он вам&nbsp;— ваш отзыв поможет другим с&nbsp;выбором.</p>
+                            </div>
+                            <a class="button" href="{{reviews.href}}">Оставить отзыв</a>
+                        </div>
+                    {{/if}}
+                </div>
+            </div>
+
+            {{#if brewing}}
+                <aside class="brew">
+                    <h2 class="brew__title">Как заваривать</h2>
+                    <dl class="brew__params">
+                        {{#each brewing}}
+                            <div class="brew__param">
+                                <dt class="brew__label">
+                                    {{Icon iconName=icon className='brew__icon'}}
+                                    {{label}}
+                                </dt>
+                                <dd class="brew__value">{{value}}</dd>
+                            </div>
+                        {{/each}}
+                    </dl>
+                </aside>
+            {{/if}}
+        </section>
+    </div>
+
+    {{#if packs}}
+        <a class="button sticky-cta" href="#buy" data-sticky-cta>
+            <span class="sticky-cta__price">
+                <span class="sticky-cta__from">от</span>
+                {{minPrice packs}}
+            </span>
+            Выбрать фасовку
+        </a>
+    {{/if}}
+</article>

@@ -1,0 +1,52 @@
+<section class="related" id="related" data-related>
+    <div class="container">
+        <div class="related__head">
+            <h2 class="related__title">Похожие и&nbsp;сопутствующие</h2>
+            <a class="related__more" href="{{more.href}}">
+                {{more.label}}
+                {{Icon iconName='arrow-right' className='related__more-icon'}}
+            </a>
+            <div class="related__arrows">
+                <button class="related__arrow related__arrow--prev" type="button" title="Назад" data-slider-prev>
+                    {{Icon iconName='arrow-right' className='related__arrow-icon'}}
+                </button>
+                <button class="related__arrow" type="button" title="Вперёд" data-slider-next>
+                    {{Icon iconName='arrow-right' className='related__arrow-icon'}}
+                </button>
+            </div>
+        </div>
+
+        <ul class="related__list" data-slider>
+            {{#each items}}
+                <li class="card">
+                    <div class="card__media">
+                        <img class="card__image" src="static/img/content/{{image}}.webp" width="400" height="400" alt="" loading="lazy">
+                        {{#if oldPrice}}
+                            <span class="card__badge">−{{discount price oldPrice}}%</span>
+                        {{/if}}
+                    </div>
+                    <p class="card__category">{{category}}</p>
+                    <h3 class="card__name"><a class="card__link" href="{{href}}">{{name}}</a></h3>
+                    <div class="card__footer">
+                        <p class="card__price">
+                            {{money price}}
+                            {{#if oldPrice}}<s class="card__old">{{money oldPrice}}</s>{{/if}}
+                            <span class="card__weight">за&nbsp;100&nbsp;г</span>
+                        </p>
+                        <button
+                            class="button button--round card__cart"
+                            type="button"
+                            title="В корзину"
+                            data-cart-add
+                            data-sku="{{image}}"
+                            data-name="{{name}}"
+                            data-image="static/img/content/{{image}}.webp"
+                            data-info="100&nbsp;г · {{money price}}">
+                            {{Icon iconName='cart' className='card__cart-icon'}}
+                        </button>
+                    </div>
+                </li>
+            {{/each}}
+        </ul>
+    </div>
+</section>

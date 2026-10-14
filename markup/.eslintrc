@@ -1,0 +1,15 @@
+{
+    "root": true,
+    "extends": "eslint:recommended",
+    "env": {
+        "browser": true,
+        "es6": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2019,
+        "sourceType": "script"
+    },
+    "rules": {
+        "no-empty": ["error", { "allowEmptyCatch": true }]
+    }
+}

@@ -1,0 +1,142 @@
+{{#if notice}}
+    <aside class="notice">
+        <details class="container notice__details">
+            <summary class="notice__summary">
+                <span class="notice__badge">!</span>
+                <strong class="notice__title">{{notice.title}}</strong>
+                <span class="notice__teaser">{{notice.text}}</span>
+                <span class="notice__toggle">
+                    <span class="notice__more">Подробнее</span>
+                    <span class="notice__less">Свернуть</span>
+                    {{Icon iconName='chevron-down' className='notice__chevron'}}
+                </span>
+            </summary>
+            <p class="notice__text">{{nbsp notice.text}}</p>
+        </details>
+    </aside>
+{{/if}}
+
+<header class="header">
+    <div class="container header__inner">
+        <a class="logo header__logo" href="https://teaboom.ru/">
+            <img class="logo__image" src="static/img/general/logo.png" width="48" height="48" alt="Чайный Бум">
+            <span class="logo__text">
+                <span class="logo__name">Чайный Бум</span>
+                <span class="logo__tagline">интернет-магазин чая и&nbsp;посуды</span>
+            </span>
+        </a>
+
+        <nav class="header__nav">
+            <div class="catalog" data-dropdown>
+                <button class="header__link catalog__toggle" type="button" data-dropdown-toggle>
+                    Каталог
+                    {{Icon iconName='chevron-down' className='catalog__chevron'}}
+                </button>
+                <div class="dropdown">
+                    <ul class="container catalog__list">
+                        {{#each catalog}}
+                            <li>
+                                <a class="catalog__link{{#if current}} catalog__link--current{{/if}}" href="{{href}}">{{label}}</a>
+                            </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+            <ul class="header__menu">
+                {{#each nav}}
+                    <li>
+                        <a class="header__link{{#if icon}} header__link--accent{{/if}}" href="{{href}}">
+                            {{#if icon}}{{Icon iconName=icon className='header__link-icon'}}{{/if}}
+                            {{label}}
+                        </a>
+                    </li>
+                {{/each}}
+            </ul>
+        </nav>
+
+        <div class="header__contacts">
+            <a class="header__phone" href="{{phone.href}}">{{phone.label}}</a>
+            <span class="header__hours">{{hours}}</span>
+        </div>
+
+        <div class="header__actions">
+            <div class="search" data-dropdown>
+                <button class="header__action search__toggle" type="button" title="Поиск" data-dropdown-toggle>
+                    {{Icon iconName='search' className='header__action-icon search__open'}}
+                    {{Icon iconName='close' className='header__action-icon search__close'}}
+                </button>
+                <div class="dropdown">
+                    <div class="container">
+                        <div class="search__inner" data-search>
+                            <form class="search__form" action="https://teaboom.ru/search">
+                                <input class="search__input" type="search" name="q" placeholder="Найти чай, кофе или посуду" autocomplete="off" data-search-input>
+                                <button class="button search__submit" type="submit">
+                                    <span class="search__submit-text">Найти</span>
+                                    {{Icon iconName='search' className='search__submit-icon'}}
+                                </button>
+                            </form>
+
+                            <div class="search__popular" data-search-popular>
+                                <span class="search__label">Часто ищут</span>
+                                {{#each search.popular}}
+                                    <button class="search__chip" type="button" data-search-query="{{this}}">{{this}}</button>
+                                {{/each}}
+                            </div>
+
+                            <div class="search__results" data-search-results hidden>
+                                <ul class="search__list">
+                                    {{#each search.items}}
+                                        <li data-search-item>
+                                            <a class="search__item" href="{{href}}">
+                                                <img class="search__thumb" src="static/img/content/{{image}}.webp" width="48" height="48" alt="" loading="lazy">
+                                                <span class="search__name" data-search-name>{{name}}</span>
+                                                <span class="search__sku">100&nbsp;г · арт. {{sku}}</span>
+                                                {{#if price}}
+                                                    <span class="search__price">{{money price}}</span>
+                                                {{else}}
+                                                    <span class="search__price search__price--out">Нет в&nbsp;наличии</span>
+                                                {{/if}}
+                                            </a>
+                                        </li>
+                                    {{/each}}
+                                </ul>
+                                <p class="search__empty" data-search-empty>Ничего не&nbsp;нашли&nbsp;— попробуйте другой запрос</p>
+                                <a class="search__all" href="https://teaboom.ru/search" data-search-all>
+                                    <span>Все результаты (<span data-search-count>0</span>)</span>
+                                    {{Icon iconName='arrow-right' className='search__all-icon'}}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <a class="header__action header__action--compact" href="{{phone.href}}" title="Позвонить">
+                {{Icon iconName='phone' className='header__action-icon'}}
+            </a>
+            <a class="header__action header__action--cart" href="https://teaboom.ru/cart" title="Корзина">
+                {{Icon iconName='cart' className='header__action-icon'}}
+                <span class="header__count" data-cart-count>0</span>
+            </a>
+        </div>
+    </div>
+</header>
+
+<div class="toast" data-toast data-type="cart">
+    <span class="toast__image" data-toast-image></span>
+    <div class="toast__body">
+        <p class="toast__title">
+            {{Icon iconName='check' className='toast__icon toast__icon--cart'}}
+            {{Icon iconName='heart' className='toast__icon toast__icon--favorite'}}
+            <span data-toast-title>Добавлено в&nbsp;корзину</span>
+        </p>
+        <p class="toast__name" data-toast-name></p>
+        <p class="toast__info" data-toast-info></p>
+        <a class="toast__link" href="https://teaboom.ru/cart" data-toast-link>
+            <span data-toast-link-label>Перейти в&nbsp;корзину</span>
+            {{Icon iconName='arrow-right' className='toast__link-icon'}}
+        </a>
+    </div>
+    <button class="toast__close" type="button" title="Закрыть" data-toast-close>
+        {{Icon iconName='close' className='toast__close-icon'}}
+    </button>
+</div>

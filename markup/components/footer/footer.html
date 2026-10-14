@@ -1,0 +1,50 @@
+<footer class="footer">
+    <div class="container footer__inner">
+        <div class="footer__brand">
+            <a class="logo logo--inverse" href="https://teaboom.ru/">
+                <img class="logo__image" src="static/img/general/logo.png" width="48" height="48" alt="">
+                <span class="logo__text">
+                    <span class="logo__name">Чайный Бум</span>
+                    <span class="logo__tagline">интернет-магазин чая и&nbsp;посуды</span>
+                </span>
+            </a>
+            <ul class="footer__socials">
+                {{#each socials}}
+                    <li><a class="footer__social" href="{{href}}" target="_blank" rel="noopener">{{label}}</a></li>
+                {{/each}}
+            </ul>
+        </div>
+
+        <nav class="footer__nav">
+            {{#each columns}}
+                <div class="footer__column">
+                    <h2 class="footer__title">{{title}}</h2>
+                    <ul class="footer__links">
+                        {{#each links}}
+                            <li><a class="footer__link" href="{{href}}">{{label}}</a></li>
+                        {{/each}}
+                    </ul>
+                </div>
+            {{/each}}
+        </nav>
+
+        <address class="footer__contacts">
+            <h2 class="footer__title">Контакты</h2>
+            {{#each phones}}
+                <a class="footer__phone" href="{{href}}">{{label}}</a>
+            {{/each}}
+            <a class="footer__link" href="mailto:{{email}}">{{email}}</a>
+            <p class="footer__text">{{address}}</p>
+            <p class="footer__text">
+                {{#each hours}}
+                    <span>{{this}}</span>
+                {{/each}}
+            </p>
+        </address>
+    </div>
+
+    <div class="container footer__bottom">
+        <p>© 2026 Teaboom.ru. Все права защищены</p>
+        <a class="footer__link" href="https://teaboom.ru/page/cookie-policy">Использование cookie</a>
+    </div>
+</footer>

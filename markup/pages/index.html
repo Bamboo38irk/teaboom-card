@@ -1,0 +1,21 @@
+<!doctype html>
+<html lang="ru">
+
+    <head>
+        {{> head/head product}}
+    </head>
+
+    <body>
+        {{> header/header header notice=false}}
+
+        <main>
+            {{> product/product product}}
+            {{> related/related related}}
+        </main>
+
+        {{> footer/footer footer}}
+
+        <script src="static/js/main.js"></script>
+    </body>
+
+</html>
